@@ -14,6 +14,7 @@ import {
   formatElapsed,
   formatScheduleDate,
 } from '../../lib/format'
+import { ActivityList } from '../activity/ActivityList'
 import { useAdminTeam, type AdminScheduleRow, type AdminTeamDetail, type MembershipRole } from './api'
 import { ErrorState, Notice } from '../../components/Feedback'
 
@@ -232,6 +233,15 @@ function TeamDetail({ data, back }: { data: AdminTeamDetail; back: ReactNode }) 
             </div>
           </Panel>
         </div>
+      </Section>
+
+      <Section title="Atividade recente">
+        <ActivityList filters={{ teamId: team.id }} pageSize={10} more={false} />
+        <p className="mt-3 text-sm">
+          <Link to={`/atividade?teamId=${team.id}`} className="font-medium text-brand hover:text-brand-hover">
+            Ver toda a atividade desta equipe
+          </Link>
+        </p>
       </Section>
     </>
   )

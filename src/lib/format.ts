@@ -14,6 +14,13 @@ export function formatDate(iso: string, timeZone = DEFAULT_ZONE): string {
   }).format(new Date(iso))
 }
 
+/// "2 de out. de 2026 · 14:32": um instante, com a hora.
+export function formatDateTime(iso: string, timeZone = DEFAULT_ZONE): string {
+  const date = new Date(iso)
+  const time = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone }).format(date)
+  return `${formatDate(iso, timeZone)} · ${time}`
+}
+
 /// "dom., 1 de nov. · 08:30" — o dia de uma escala, com o horário do culto.
 export function formatScheduleDate(iso: string, timeZone = DEFAULT_ZONE): string {
   const date = new Date(iso)

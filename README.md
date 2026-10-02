@@ -71,9 +71,9 @@ antes.
 | `/` | Dashboard (`GET /admin/overview`) |
 | `/equipes` | Equipes — `?search=` e `?page=` na URL |
 | `/equipes/:teamId` | Detalhes da equipe (`GET /admin/teams/:id`) |
-| `/usuarios` | Usuários |
-| `/usuarios/:userId` | Detalhes do usuário |
-| `/atividade` | Atividade recente |
+| `/usuarios` | Usuários — `?search=`, `?filter=`, `?sort=` e `?page=` (`GET /admin/users`) |
+| `/usuarios/:userId` | Detalhes do usuário (`GET /admin/users/:id`) |
+| `/atividade` | Atividade — `?type=`, `?teamId=`, `?userId=` (`GET /admin/activity`) |
 | qualquer outro | Página não encontrada |
 
 As rotas usam o histórico do navegador (sem `#`): a hospedagem precisa servir
@@ -122,4 +122,4 @@ Railway `PAUTA`, **deploy a cada push em `main`**, sem versão nem tag.
 
 ## Ainda não feito
 
-- Usuários e atividade.
+- Uma lista para cada contagem de "Para inspecionar" do dashboard.
