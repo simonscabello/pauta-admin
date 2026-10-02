@@ -1,0 +1,16 @@
+#  Deploy do Pauta Admin no Railway: o Dockerfile desta pasta (Node para o
+#  build, Caddy para servir). Variável obrigatória no serviço:
+#    VITE_API_BASE_URL   endereço da pauta-api, sem barra no fim e sem /api/v1
+#                        (pública: vai no JS e na CSP)
+#  O domínio do admin precisa estar no CORS_ORIGINS da pauta-api.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+numReplicas = 1
+healthcheckPath = "/"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
