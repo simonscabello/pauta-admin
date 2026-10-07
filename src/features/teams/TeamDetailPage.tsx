@@ -15,6 +15,7 @@ import {
   formatScheduleDate,
 } from '../../lib/format'
 import { ActivityList } from '../activity/ActivityList'
+import { TeamAiSettings } from './TeamAiSettings'
 import { useAdminTeam, type AdminScheduleRow, type AdminTeamDetail, type MembershipRole } from './api'
 import { ErrorState, Notice } from '../../components/Feedback'
 
@@ -25,7 +26,8 @@ const ROLE_LABEL: Record<MembershipRole, string> = {
 }
 
 /// Página de inspeção: como esta equipe usa o Pauta. Só leitura, e só os
-/// números que o banco responde de verdade (ver `AdminService.teamDetail`).
+/// números que o banco responde de verdade (ver `AdminService.teamDetail`) --
+/// com uma exceção: os interruptores dos copilotos de IA (`TeamAiSettings`).
 export function TeamDetailPage() {
   const { teamId = '' } = useParams()
   const location = useLocation()
@@ -234,6 +236,8 @@ function TeamDetail({ data, back }: { data: AdminTeamDetail; back: ReactNode }) 
           </Panel>
         </div>
       </Section>
+
+      <TeamAiSettings teamId={team.id} timeZone={tz} />
 
       <Section title="Atividade recente">
         <ActivityList filters={{ teamId: team.id }} pageSize={10} more={false} />

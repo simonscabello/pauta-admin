@@ -4,7 +4,8 @@ Backoffice interno do Pauta: acompanhamento de equipes, usuários e uso do
 produto. Uso exclusivo da equipe do Pauta — não é divulgado nem indexado
 (`robots: noindex`).
 
-- **Somente leitura**, por enquanto. Nada aqui grava dados.
+- **Somente leitura**, com uma exceção: os interruptores dos copilotos de IA
+  no detalhe da equipe (`PATCH /admin/teams/:teamId/ai-settings`).
 - **Não acessa o banco.** Toda informação vem da `pauta-api` (NestJS), pelas
   rotas `/api/v1/admin/*`. Tela que ainda não tem rota diz "Ainda não
   disponível" e não mostra número nenhum.

@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { apiRequest } from '../../lib/api'
 
 /// Uma linha de `GET /admin/teams`. Só metadados: a API não devolve
@@ -83,5 +83,50 @@ export function useAdminTeam(teamId: string) {
   return useQuery({
     queryKey: ['admin', 'teams', teamId],
     queryFn: () => apiRequest<AdminTeamDetail>(`/admin/teams/${encodeURIComponent(teamId)}`),
+  })
+}
+
+/// `GET|PATCH /admin/teams/:teamId/ai-settings`: os copilotos de IA da
+/// equipe. A única escrita do admin.
+export interface AdminTeamAiSettings {
+  aiEnabled: boolean
+  scheduleCopilot: boolean
+  repertoireCopilot: boolean
+  updatedAt: string | null
+  /// O servidor tem provedor de IA configurado. Sem ele, o Copiloto de
+  /// Repertório não funciona mesmo ligado; o de Escalas não depende dele.
+  providerConfigured: boolean
+  usage30d: {
+    scheduleSessions: number
+    scheduleCommitted: number
+    repertoireSessions: number
+    aiCalls: number
+    inputTokens: number
+    outputTokens: number
+    /// Nulo quando nenhuma chamada tinha preço configurado.
+    costMicroUsd: number | null
+  }
+}
+
+export type AiSettingsChange = Partial<Pick<AdminTeamAiSettings, 'aiEnabled' | 'scheduleCopilot' | 'repertoireCopilot'>>
+
+const aiSettingsKey = (teamId: string) => ['admin', 'teams', teamId, 'ai-settings']
+
+export function useTeamAiSettings(teamId: string) {
+  return useQuery({
+    queryKey: aiSettingsKey(teamId),
+    queryFn: () => apiRequest<AdminTeamAiSettings>(`/admin/teams/${encodeURIComponent(teamId)}/ai-settings`),
+  })
+}
+
+export function useUpdateTeamAiSettings(teamId: string) {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn: (change: AiSettingsChange) =>
+      apiRequest<AdminTeamAiSettings>(`/admin/teams/${encodeURIComponent(teamId)}/ai-settings`, {
+        method: 'PATCH',
+        body: JSON.stringify(change),
+      }),
+    onSuccess: (data) => client.setQueryData(aiSettingsKey(teamId), data),
   })
 }
