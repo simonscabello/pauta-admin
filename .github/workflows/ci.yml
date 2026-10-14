@@ -1,0 +1,33 @@
+# Confere cada push em `main` e cada pull request: lint, tipos, testes e o
+# build. O push em `main` publica o admin (o Railway faz deploy a cada push);
+# este fluxo não segura o deploy, mas deixa o vermelho visível no commit.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      # Obrigatória no build (o vite.config.ts recusa sem ela). O valor não
+      # importa aqui: nada é publicado por este fluxo.
+      VITE_API_BASE_URL: https://api.exemplo.invalid
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci --no-update-notifier
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
