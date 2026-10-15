@@ -102,14 +102,14 @@ senhas estão no `AGENTS.md`).
 
 ## Produção
 
-No ar em **`https://pauta-admin-production.up.railway.app`** (domínio do
+No ar em **`https://admin.pautalouvor.com.br`** (domínio do
 Railway; o próprio fica para depois). Serviço `pauta-admin` no projeto
 Railway `PAUTA`, **deploy a cada push em `main`**, sem versão nem tag.
 
 - `Dockerfile`: Node 22 faz o `npm ci` e o `npm run build`; a imagem final é
   só o Caddy servindo `dist/` na porta 8080. `railway.toml` aponta para ele.
 - **`VITE_API_BASE_URL`** é variável do serviço, lida no build (o Railway a
-  passa como build arg): `https://backend-production-b304.up.railway.app`,
+  passa como build arg): `https://api.pautalouvor.com.br`,
   sem barra e sem `/api/v1`. **É pública** — vai no JS —, e por isso nenhum
   segredo entra numa variável `VITE_`. O Caddy lê a mesma variável para a CSP.
 - `Caddyfile`: *SPA fallback* (`try_files {path} /index.html`, então F5 em
